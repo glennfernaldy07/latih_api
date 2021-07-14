@@ -7,9 +7,9 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"github.com/ydhnwb/golang_api/dto"
-	"github.com/ydhnwb/golang_api/helper"
-	"github.com/ydhnwb/golang_api/service"
+	"github.com/kasihTakSampai/latih_api/dto"
+	"github.com/kasihTakSampai/latih_api/helper"
+	"github.com/kasihTakSampai/latih_api/service"
 )
 
 //UserController is a ....
