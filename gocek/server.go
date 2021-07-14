@@ -6,17 +6,20 @@ import (
 	"github.com/kasihTakSampai/latih_api/controller"
 	"gorm.io/gorm"
 )
-var(
-	db *gorm.DB = config.SetupDatabaseConnection{}
-	authController = controller.newAuthController{}
+
+var (
+	db             *gorm.DB = config.SetupDatabaseConnection{}
+	authController          = controller.newAuthController{}
 )
+
 func main() {
 	defer config.CloseDatabaseConnection(db)
 	r := gin.Default()
 
-	authRoutes := r.Group(api/auth){
-		authRoutes.POST("/login")
-		authRoutes.POST("/register")
+	authRoutes := r.Group("api/auth")
+	{
+		authRoutes.POST("/login", authController.Login)
+		authRoutes.POST("/register", authController.Register)
 	}
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
