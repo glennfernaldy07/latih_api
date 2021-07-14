@@ -3,16 +3,16 @@ package service
 import (
 	"log"
 
+	"github.com/kasihTakSampai/latih_api/dto"
+	"github.com/kasihTakSampai/latih_api/models"
+	"github.com/kasihTakSampai/latih_api/repository"
 	"github.com/mashingan/smapping"
-	"github.com/ydhnwb/golang_api/dto"
-	"github.com/ydhnwb/golang_api/entity"
-	"github.com/ydhnwb/golang_api/repository"
 )
 
 //UserService is a contract.....
 type UserService interface {
-	Update(user dto.UserUpdateDTO) entity.User
-	Profile(userID string) entity.User
+	Update(user dto.UserUpdateDTO) models.User
+	Profile(userID string) models.User
 }
 
 type userService struct {
@@ -26,8 +26,8 @@ func NewUserService(userRepo repository.UserRepository) UserService {
 	}
 }
 
-func (service *userService) Update(user dto.UserUpdateDTO) entity.User {
-	userToUpdate := entity.User{}
+func (service *userService) Update(user dto.UserUpdateDTO) models.User {
+	userToUpdate := models.User{}
 	err := smapping.FillStruct(&userToUpdate, smapping.MapFields(&user))
 	if err != nil {
 		log.Fatalf("Failed map %v:", err)
@@ -36,6 +36,6 @@ func (service *userService) Update(user dto.UserUpdateDTO) entity.User {
 	return updatedUser
 }
 
-func (service *userService) Profile(userID string) entity.User {
+func (service *userService) Profile(userID string) models.User {
 	return service.userRepository.ProfileUser(userID)
 }

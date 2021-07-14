@@ -3,18 +3,18 @@ package service
 import (
 	"log"
 
+	"github.com/kasihTakSampai/latih_api/dto"
+	"github.com/kasihTakSampai/latih_api/models"
+	"github.com/kasihTakSampai/latih_api/repository"
 	"github.com/mashingan/smapping"
-	"github.com/ydhnwb/golang_api/dto"
-	"github.com/ydhnwb/golang_api/entity"
-	"github.com/ydhnwb/golang_api/repository"
 	"golang.org/x/crypto/bcrypt"
 )
 
 //AuthService is a contract about something that this service can do
 type AuthService interface {
 	VerifyCredential(email string, password string) interface{}
-	CreateUser(user dto.RegisterDTO) entity.User
-	FindByEmail(email string) entity.User
+	CreateUser(user dto.RegisterDTO) models.User
+	FindByEmail(email string) models.User
 	IsDuplicateEmail(email string) bool
 }
 
@@ -31,7 +31,7 @@ func NewAuthService(userRep repository.UserRepository) AuthService {
 
 func (service *authService) VerifyCredential(email string, password string) interface{} {
 	res := service.userRepository.VerifyCredential(email, password)
-	if v, ok := res.(entity.User); ok {
+	if v, ok := res.(models.User); ok {
 		comparedPassword := comparePassword(v.Password, []byte(password))
 		if v.Email == email && comparedPassword {
 			return res
@@ -41,8 +41,8 @@ func (service *authService) VerifyCredential(email string, password string) inte
 	return false
 }
 
-func (service *authService) CreateUser(user dto.RegisterDTO) entity.User {
-	userToCreate := entity.User{}
+func (service *authService) CreateUser(user dto.RegisterDTO) models.User {
+	userToCreate := models.User{}
 	err := smapping.FillStruct(&userToCreate, smapping.MapFields(&user))
 	if err != nil {
 		log.Fatalf("Failed map %v", err)
@@ -51,7 +51,7 @@ func (service *authService) CreateUser(user dto.RegisterDTO) entity.User {
 	return res
 }
 
-func (service *authService) FindByEmail(email string) entity.User {
+func (service *authService) FindByEmail(email string) models.User {
 	return service.userRepository.FindByEmail(email)
 }
 

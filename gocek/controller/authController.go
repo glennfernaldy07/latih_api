@@ -5,10 +5,10 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/ydhnwb/golang_api/dto"
-	"github.com/ydhnwb/golang_api/entity"
-	"github.com/ydhnwb/golang_api/helper"
-	"github.com/ydhnwb/golang_api/service"
+	"github.com/kasihTakSampai/latih_api/dto"
+	"github.com/kasihTakSampai/latih_api/helper"
+	"github.com/kasihTakSampai/latih_api/models"
+	"github.com/kasihTakSampai/latih_api/service"
 )
 
 //AuthController interface is a contract what this controller can do
@@ -39,7 +39,7 @@ func (c *authController) Login(ctx *gin.Context) {
 		return
 	}
 	authResult := c.authService.VerifyCredential(loginDTO.Email, loginDTO.Password)
-	if v, ok := authResult.(entity.User); ok {
+	if v, ok := authResult.(models.User); ok {
 		generatedToken := c.jwtService.GenerateToken(strconv.FormatUint(v.ID, 10))
 		v.Token = generatedToken
 		response := helper.BuildResponse(true, "OK!", v)

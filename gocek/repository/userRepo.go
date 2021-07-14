@@ -3,19 +3,19 @@ package repository
 import (
 	"log"
 
-	"github.com/kasihTakSampai/latih_api/model"
+	"github.com/kasihTakSampai/latih_api/models"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )
 
 //UserRepository is contract what userRepository can do to db
 type UserRepository interface {
-	InsertUser(user model.User) model.User
-	UpdateUser(user model.User) model.User
+	InsertUser(user models.User) models.User
+	UpdateUser(user models.User) models.User
 	VerifyCredential(email string, password string) interface{}
 	IsDuplicateEmail(email string) (tx *gorm.DB)
-	FindByEmail(email string) model.User
-	ProfileUser(userID string) model.User
+	FindByEmail(email string) models.User
+	ProfileUser(userID string) models.User
 }
 
 type userConnection struct {
@@ -29,17 +29,17 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 	}
 }
 
-func (db *userConnection) InsertUser(user model.User) model.User {
+func (db *userConnection) InsertUser(user models.User) models.User {
 	user.Password = hashAndSalt([]byte(user.Password))
 	db.connection.Save(&user)
 	return user
 }
 
-func (db *userConnection) UpdateUser(user model.User) model.User {
+func (db *userConnection) UpdateUser(user models.User) models.User {
 	if user.Password != "" {
 		user.Password = hashAndSalt([]byte(user.Password))
 	} else {
-		var tempUser model.User
+		var tempUser models.User
 		db.connection.Find(&tempUser, user.ID)
 		user.Password = tempUser.Password
 	}
@@ -49,7 +49,7 @@ func (db *userConnection) UpdateUser(user model.User) model.User {
 }
 
 func (db *userConnection) VerifyCredential(email string, password string) interface{} {
-	var user model.User
+	var user models.User
 	res := db.connection.Where("email = ?", email).Take(&user)
 	if res.Error == nil {
 		return user
@@ -58,18 +58,18 @@ func (db *userConnection) VerifyCredential(email string, password string) interf
 }
 
 func (db *userConnection) IsDuplicateEmail(email string) (tx *gorm.DB) {
-	var user model.User
+	var user models.User
 	return db.connection.Where("email = ?", email).Take(&user)
 }
 
-func (db *userConnection) FindByEmail(email string) model.User {
-	var user model.User
+func (db *userConnection) FindByEmail(email string) models.User {
+	var user models.User
 	db.connection.Where("email = ?", email).Take(&user)
 	return user
 }
 
-func (db *userConnection) ProfileUser(userID string) model.User {
-	var user model.User
+func (db *userConnection) ProfileUser(userID string) models.User {
+	var user models.User
 	db.connection.Preload("Books").Preload("Books.User").Find(&user, userID)
 	return user
 }
