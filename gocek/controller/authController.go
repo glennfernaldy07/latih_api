@@ -19,14 +19,14 @@ func newAuthController() AuthController {
 }
 
 func (c *authController) Login(ctx *gin.Context) {
-	ctx.JSON(http.StatusOk, gin.H{
+	ctx.JSON(http.StatusOK, gin.H{
 		"message": "hello login",
 	})
 }
 
 func (c *authController) Register(ctx *gin.Context) {
 
-	ctx.JSON(http.StatusOk, gin.H{
+	ctx.JSON(http.StatusOK, gin.H{
 		"message": "hello register",
 	})
 }

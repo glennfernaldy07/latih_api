@@ -8,8 +8,8 @@ import (
 )
 
 var (
-	db             *gorm.DB = config.SetupDatabaseConnection{}
-	authController          = controller.newAuthController{}
+	db             *gorm.DB                  = config.SetupDatabaseConnection()
+	authController controller.AuthController = controller.newAuthController()
 )
 
 func main() {
@@ -18,8 +18,8 @@ func main() {
 
 	authRoutes := r.Group("api/auth")
 	{
-		authRoutes.POST("/login", authController.Login)
-		authRoutes.POST("/register", authController.Register)
+		authRoutes.POST("/login")
+		authRoutes.POST("/register")
 	}
 	r.GET("/", func(c *gin.Context) {
 		c.JSON(200, gin.H{
