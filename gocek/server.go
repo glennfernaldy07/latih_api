@@ -25,13 +25,13 @@ func main() {
 	defer config.CloseDatabaseConnection(db)
 	r := gin.Default()
 
-	authRoutes := r.Group("api/auth")
+	authRoutes := r.Group("latih-api/auth")
 	{
 		authRoutes.POST("/login", authController.Login)
 		authRoutes.POST("/register", authController.Register)
 	}
 
-	userRoutes := r.Group("api/user", middleware.AuthorizeJWT(jwtService))
+	userRoutes := r.Group("latih-api/user", middleware.AuthorizeJWT(jwtService))
 	{
 		userRoutes.GET("/profile", userController.Profile)
 		userRoutes.PUT("/profile", userController.Update)
